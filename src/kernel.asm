@@ -8,9 +8,9 @@ stack_underflow:
 
 stack_uoflow_controller:
   cmp r0, r4
-  jg stack_overflow
+  jg stack_underflow
   cmp r0, r3 
-  jl stack_underflow 
+  jl stack_overflow 
   ret
 
 kernel_start:
@@ -31,7 +31,7 @@ kernel_start:
   add 1024, r0 
   mov r0, r4 
   # STACK: r3--between--r4 
-  mov r3, r0 # setting stack pointer
+  mov r4, r0 # setting stack pointer
   # now we can use stack
 
 kernel_work: 
@@ -42,6 +42,23 @@ kernel_work:
   pop r10
   print r10
 
+kernel_draw: # r10 return val 
+  inb 14, r8  # getting framebuffer address 
+  inb 15, r7  # framebuffer size
+  print r8 
+  print r7
+  mov 255, r6
+  mov 0, r9 
+
+loop_frame:
+  cmp r9, r7 
+  je kernel_halt
+  
+  store r6, r8 
+  inc r9 
+  inc r8
+  jmp loop_frame
+
 kernel_halt: 
-  hlt
+  print r9
   info 10
