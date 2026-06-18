@@ -44,3 +44,4 @@ kernel_work:
 
 kernel_halt: 
   hlt
+  info 10
