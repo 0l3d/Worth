@@ -11,18 +11,15 @@ kernel_draw:
   pop r16 # getting first one 
 
   push r13     # saving user registers (actual memory pos)
-  push r14     # saving user registers (framebuffer start)
-  push r15     # saving user registers (framebuffer size)
+  push r14     # saving user registers (framebuffer start)]
+  push r15     # saving user registers (color)
   inb 14, r14  # framebuffer pos 
-  inb 15, r15  # framebuffer size
   
   # calculating actual memory pos
   mov 0, r13 
   add r14, r13 
   mul r18, r17
-  print r17
   add r16, r17
-  print r17
   add r17, r13 
   # basically: 
   # POS(x, y) = y * WINDOW_HEIGHT + x
@@ -34,12 +31,11 @@ kernel_draw:
   # We need to add an offset X to P to write to the desired location. 
   
 
-  print r13        # debug 
   mov 255, p15b0   # color (white for test)
   store p15b0, r13 # writing to memory.
 
-  pop r15      # pop user register
-  pop r14      # pop user register 
+  pop r15      # pop user register.
+  pop r14      # pop user register.
   pop r13      # pop user register.
 
   push r11     # pushing actual ret adress again for ret.

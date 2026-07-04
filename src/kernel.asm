@@ -2,18 +2,70 @@ import "src/syscall.asm"
 
 section code
 kernel_start:
-  mov 1010, r11 # kernel start debug 
-  print r11
-
+  # set stack 10k bytes 
   add 10000, r0
+
+  mov 1010, r11 # kernel start debug 
+  print r11  
+  mov 50, r20 
+  mov 50, r21 
+
+  mov 0, r23  
+circle_loop_i:
+  cmp r23, 201
+  je circle_end_i
+
+  mov 0, r24  
+
+circle_loop_j:
+  cmp r24, 201
+  je circle_end_j
+
+  mov r23, r26
+  mov r23, r29
+  mul r29, r26
+
+  mov r24, r27
+  mov r24, r29
+  mul r29, r27
+
+  add r27, r26
+
+  mov 10000, r29
+  add r29, r26
+
+  mov r23, r28
+  add r24, r28
+
+  mov 200, r29
+  mul r29, r28 
+
+  cmp r26, r28
+  jg skip_pixel
+
+  mov r20, r12
+  add r24, r12
   
-  mov 200, r16
-  push r16
-  mov 250, r16
-  push r16
-  mov 256, r16
-  push r16
-  call kernel_draw
+  mov r21, r13
+  add r23, r13
+
+  mov 256, r14 
+
+  push r12    
+  push r13     
+  push r14     
+  
+  call kernel_draw 
+
+skip_pixel:
+  inc r24    
+  jmp circle_loop_j
+
+circle_end_j:
+  inc r23     
+  jmp circle_loop_i
+
+circle_end_i:
 
 kernel_halt: 
   jmp kernel_halt
