@@ -10,7 +10,16 @@ kernel_start:
   mov 50, r20 
   mov 50, r21 
 
-  mov 0, r23  
+  mov 0, r23 
+
+key_control:
+  inb 11, r9
+
+  cmp r9, 4
+  je circle_loop_i
+
+  jmp key_control
+
 circle_loop_i:
   cmp r23, 201
   je circle_end_i
@@ -66,6 +75,7 @@ circle_end_j:
   jmp circle_loop_i
 
 circle_end_i:
+  print r9
 
 kernel_halt: 
   jmp kernel_halt
