@@ -13,7 +13,7 @@ kernel_draw:
   push r13     # saving user registers (actual memory pos)
   push r14     # saving user registers (framebuffer start)]
   push r15     # saving user registers (color)
-  in 14, r14  # framebuffer pos 
+  in 0xE, r14  # framebuffer pos 
   
   # calculating actual memory pos
   mov 0, r13 
@@ -31,7 +31,7 @@ kernel_draw:
   # We need to add an offset X to P to write to the desired location. 
   
 
-  mov 255, p15b0   # color (white for test)
+  mov 0xFF, p15b0   # color (white for test)
   store p15b0, r13 # writing to memory.
 
   pop r15      # pop user register.
