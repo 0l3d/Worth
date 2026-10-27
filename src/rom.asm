@@ -1,13 +1,15 @@
 #EVERY INSTRUCTION IS 16 BYTE
-section code 
+#ROMSIZE 10KB
+section code
+  in 8, r10 # getting rom size
+  print r10
   mov 0, r0 
-  mov 1025, r10 
-  outb 9, r0 
+  out 9, r0 
 
   mov 0, r3
 
 readBinaryHeaderFromDisk:
-  inb 10, p2b0
+  in 10, p2b0
   store p2b0, r10
 
   cmp r3, 56
@@ -19,7 +21,7 @@ readBinaryHeaderFromDisk:
   jmp readBinaryHeaderFromDisk
 
 CheckHeader:
-  mov 1025, r11  # HEADER SIZE IS ALWAYS 56 BYTES
+  in 8, r11  # HEADER SIZE IS ALWAYS 56 BYTES
   # HEADER ALIGNMENT:
   #  uint64_t section_data -> 8 byte
   #  uint64_t section_bss -> 8 byte 
@@ -29,8 +31,10 @@ CheckHeader:
   #  uint64_t data_size -> 8 byte 
   #  uint64_t entry_start_point -> 8 byte
 
-  add 24, r11 
-  load r11, r12 
+  add 16, r11 
+  load r11, r16
+  add 8, r11 
+  load r11, r12
   add 24, r11 
   load r11, r14
   mov 0, r3
@@ -40,10 +44,10 @@ CheckHeader:
   print r10
 
   mov 56, r0 
-  outb 9, r0 
+  out 9, r0
 
 getKernelFromDisk:
-  inb 10, p2b0 
+  in 10, p2b0 
   store p2b0, r10
   
   cmp r3, r12 
@@ -55,9 +59,26 @@ getKernelFromDisk:
   jmp getKernelFromDisk
 
 kernel_start:
+
+  # SETTING FRAME BUFFER
+  mov 65535, r15 
+  out 15, r15 
+  add 10239, r15 
+  out 14, r15
+  # SETTING FRAMEBUFFER
+
+
+  cmp r14, 0 
+  je kernel_code_sectioner
+
   mov r10, r0 # stack pointer set to end 
-  add 1025, r14
-  print r14
-  load r14, p13b0 
-  print p13b0
-  jmp r14
+  mov 0, r10 
+  in 8, r10 
+  add r14, r10
+
+  jmp r10
+
+kernel_code_sectioner:
+  in 8, r10
+  add r16, r10 
+  jmp r10

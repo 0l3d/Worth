@@ -13,7 +13,7 @@ kernel_draw:
   push r13     # saving user registers (actual memory pos)
   push r14     # saving user registers (framebuffer start)]
   push r15     # saving user registers (color)
-  inb 14, r14  # framebuffer pos 
+  in 14, r14  # framebuffer pos 
   
   # calculating actual memory pos
   mov 0, r13 

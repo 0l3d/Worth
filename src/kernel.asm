@@ -3,7 +3,7 @@ import "src/syscall.asm"
 section code
 kernel_start:
   # set stack 10k bytes 
-  add 10000, r0
+  add 50000, r0
 
   mov 1010, r11 # kernel start debug 
   print r11  
@@ -13,9 +13,9 @@ kernel_start:
   mov 0, r23 
 
 key_control:
-  inb 11, r9
+  in 11, r9
 
-  cmp r9, 4
+  cmp 'a', r9
   je circle_loop_i
 
   jmp key_control
